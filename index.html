@@ -4,118 +4,79 @@
   <meta charset="UTF-8" />
   <title>To-Do (Cursor + DeepSeek)</title>
   <style>
-    body { font-family: system-ui, Arial; margin: 2rem; background: #f7f7f7; }
-    h1 { margin: 0 0 1rem; }
-    .row { display:flex; gap:.5rem; margin-bottom:1rem; }
-    .filters { margin-bottom: 1rem; }
-    .filters button { margin-right: .5rem; padding: .4rem .8rem; }
-    input, button { padding:.6rem .8rem; }
-    ul { list-style:none; padding:0; }
-    li { background:#fff; padding:.6rem .8rem; border-radius:8px; margin:.4rem 0; display:flex; justify-content:space-between; align-items:center; }
-    li.done { opacity:.6; text-decoration: line-through; }
-    .filters button.active { background: #333; color: #fff; }
-  </style>
-</head>
-<body>
-  <h1>To-Do (Cursor + DeepSeek)</h1>
-  <div class="row">
-    <input id="task" placeholder="Nueva tarea..." />
-    <button onclick="add()">Agregar</button>
-  </div>
-  <div class="filters">
-    <button id="filter-todas" class="active" onclick="setFilter('todas')">Todas</button>
-    <button id="filter-pendientes" onclick="setFilter('pendientes')">Pendientes</button>
-    <button id="filter-completadas" onclick="setFilter('completadas')">Completadas</button>
-  </div>
-  <ul id="list"></ul>
-
-  <script>
-    const input = document.getElementById('task');
-    const list  = document.getElementById('list');
-    let filter = 'todas';
-
-    function add(){
-      const text = input.value.trim();
-      if(!text) return;
-      const li = document.createElement('li');
-      li.innerHTML = `<span>${text}</span>
-        <div>
-          <button onclick="toggle(this)">✔</button>
-          <button onclick="removeItem(this)">🗑</button>
-        </div>`;
-      list.appendChild(li);
-      input.value = "";
-      save();
-      render();
+    body { 
+      font-family: system-ui, Arial; 
+      margin: 2rem; 
+      background: #f3e8ff; /* pastel lila */
     }
-    function toggle(btn){
-      const li = btn.closest('li');
-      li.classList.toggle('done');
-      save();
-      render();
+    h1 { 
+      margin: 0 0 1rem; 
+      color: #7c3aed; /* purple-600 */
+      text-shadow: 0 1px 0 #fff3; 
     }
-    function removeItem(btn){
-      btn.closest('li').remove();
-      save();
-      render();
+    .row { 
+      display: flex; 
+      gap: .5rem; 
+      margin-bottom: 1rem; 
+      background: #e0e7ff; /* pastel azul */
+      padding: .8rem 1rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px #7c3aed11;
     }
-    function save(){
-      const data = [...list.querySelectorAll('li')].map(li=>({
-        text: li.querySelector('span').textContent,
-        done: li.classList.contains('done')
-      }));
-      localStorage.setItem('todos', JSON.stringify(data));
+    input, button { 
+      padding: .6rem .8rem; 
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
     }
-    function load(){
-      const data = JSON.parse(localStorage.getItem('todos')||'[]');
-      list.innerHTML = '';
-      for(const item of data){
-        const li = document.createElement('li');
-        if(item.done) li.classList.add('done');
-        li.innerHTML = `<span>${item.text}</span>
-          <div>
-            <button onclick="toggle(this)">✔</button>
-            <button onclick="removeItem(this)">🗑</button>
-          </div>`;
-        list.appendChild(li);
-      }
+    input {
+      background: #fdf6fb;
+      border: 1px solid #e9d5ff;
+      color: #5b21b6;
     }
-    function render(){
-      // Oculta/muestra según filtro
-      [...list.children].forEach(li => {
-        if(filter === 'todas') {
-          li.style.display = '';
-        } else if(filter === 'pendientes') {
-          li.style.display = li.classList.contains('done') ? 'none' : '';
-        } else if(filter === 'completadas') {
-          li.style.display = li.classList.contains('done') ? '' : 'none';
-        }
-      });
-      // Actualiza botones de filtro
-      document.getElementById('filter-todas').classList.toggle('active', filter==='todas');
-      document.getElementById('filter-pendientes').classList.toggle('active', filter==='pendientes');
-      document.getElementById('filter-completadas').classList.toggle('active', filter==='completadas');
+    button { 
+      background: #a5b4fc; /* pastel azul */
+      color: #312e81;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: 1px solid #c7d2fe;
     }
-    function setFilter(f){
-      filter = f;
-      render();
+    button:hover {
+      background: #c7d2fe;
     }
-    // Inicialización
-    load();
-    render();
-  </script>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>To-Do (Cursor + DeepSeek)</title>
-  <style>
-    body { font-family: system-ui, Arial; margin: 2rem; background: #f7f7f7; }
-    h1 { margin: 0 0 1rem; }
-    .row { display:flex; gap:.5rem; margin-bottom:1rem; }
-    input, button { padding:.6rem .8rem; }
-    ul { list-style:none; padding:0; }
-    li { background:#fff; padding:.6rem .8rem; border-radius:8px; margin:.4rem 0; display:flex; justify-content:space-between; align-items:center; }
-    li.done { opacity:.6; text-decoration: line-through; }
+    ul { 
+      list-style: none; 
+      padding: 0; 
+    }
+    li { 
+      background: #ffe4e6; /* pastel rosado */
+      padding: .8rem 1.2rem; 
+      border-radius: 16px; 
+      margin: .5rem 0; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      box-shadow: 0 1px 6px #f472b633;
+      border: 1px solid #fbcfe8;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    li.done { 
+      opacity: .6; 
+      text-decoration: line-through; 
+      background: #e0e7ef; /* gris pastel */
+      color: #6b7280;
+    }
+    li div button {
+      margin-left: .3rem;
+      border-radius: 6px;
+      background: #f9a8d4;
+      color: #701a75;
+      border: 1px solid #fbcfe8;
+    }
+    li div button:hover {
+      background: #f472b6;
+    }
   </style>
 </head>
 <body>
